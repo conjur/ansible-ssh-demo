@@ -1,0 +1,7 @@
+FROM ubuntu:16.04
+
+RUN apt-get update
+RUN apt-get install -q -y wget openssh-client
+RUN wget -q https://github.com/cyberark/conjur-cli/releases/download/v5.4.0/conjur_5.4.0-1_amd64.deb
+RUN dpkg -i conjur_5.4.0-1_amd64.deb
+RUN apt-get install -q -y -f

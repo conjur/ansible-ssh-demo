@@ -1,0 +1,27 @@
+version: '2'
+services:
+  ansible:
+    build:
+      context: .
+      dockerfile: Dockerfile.ansible
+    image: conjur-demo/ansible
+    depends_on: [ conjur ]
+    volumes:
+      - ./hosts:/etc/ansible/hosts
+
+  conjur:
+    image: registry2.itci.conjur.net/conjur-appliance-cuke-master:4.9-stable
+    security_opt:
+      - 'seccomp=unconfined'
+
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile.client
+    image: conjur-demo/client
+    depends_on: [ conjur ]
+    entrypoint: sleep
+    command: infinity
+    working_dir: /mnt
+    volumes:
+      - ./:/mnt

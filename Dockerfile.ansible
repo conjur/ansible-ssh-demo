@@ -1,0 +1,9 @@
+FROM python:3
+
+RUN mkdir -p /ansible
+WORKDIR /ansible
+COPY ansible-requirements.txt .
+
+RUN pip install -r ansible-requirements.txt
+
+CMD [ "sleep", "infinity" ]
