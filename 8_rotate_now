@@ -1,0 +1,6 @@
+#!/bin/bash
+
+namespace=$(cat namespace)
+
+docker-compose exec client \
+               conjur variable expire --now $namespace/ansible-demo/ssh-private-key

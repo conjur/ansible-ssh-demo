@@ -1,0 +1,28 @@
+---
+# Application policy
+- !policy
+  id: ansible-demo
+  annotations:
+    description: |
+      This demo policy contains the private SSH key to access a remote host. It
+      also defines a group, `ansible-demo/ops`, which can retrieve (but not
+      update) the SSH key.
+  body:
+    - !variable
+      id: ssh-private-key
+      annotations:
+        description: private SSH key to access the demo virtual machine
+    - !group ops
+    - !permit
+      role: !group ops
+      resource: !variable ssh-private-key
+      privileges: [read, execute]
+
+# Users
+- !user alice
+
+# Entitlements
+- !grant
+  role: !group ansible-demo/ops
+  members:
+    - !user alice

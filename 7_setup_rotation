@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+namespace=$(cat namespace)
+
+docker-compose exec client \
+               conjur policy load \
+               --namespace=$namespace \
+               --as-role=group:security_admin \
+               ansible-demo-policy-with-rotation.yml
+
+docker-compose exec client \
+               conjur variable values add $namespace/ansible-demo/host docker.for.mac.localhost
+
+docker-compose exec client \
+               conjur variable values add $namespace/ansible-demo/port 2222
+
+docker-compose exec client \
+               conjur variable values add $namespace/ansible-demo/login vagrant

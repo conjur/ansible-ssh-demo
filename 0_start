@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -e
+
+# Pull required container images from Docker Hub
+echo 'Pulling Docker images...'
+docker-compose pull --quiet conjur
+
+# Build containers
+docker-compose build client
+
+# Remove containers and files created in earlier runs (if any)
+echo 'Bringing up fresh containers...'
+docker-compose down
+rm -f namespace alice_api_key roles.json
+
+# Start containers & wait for Conjur to be responsive
+docker-compose up -d
+echo 'Waiting for Conjur to be ready...'
+docker-compose exec conjur /opt/conjur/evoke/bin/wait_for_conjur
+
+# Prepare the client to connect to the Conjur server
+# Initialize the Conjur client
+echo 'Connecting the client to the Conjur server...'
+docker-compose exec client bash -c \
+               'conjur init -h https://conjur -a cucumber \
+                && conjur authn login -u admin -p secret'

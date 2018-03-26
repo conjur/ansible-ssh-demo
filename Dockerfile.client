@@ -1,7 +1,11 @@
-FROM ubuntu:16.04
+FROM ryanprior/conjur-cli4
 
-RUN apt-get update
-RUN apt-get install -q -y wget openssh-client
-RUN wget -q https://github.com/cyberark/conjur-cli/releases/download/v5.4.0/conjur_5.4.0-1_amd64.deb
-RUN dpkg -i conjur_5.4.0-1_amd64.deb
-RUN apt-get install -q -y -f
+RUN apt-get update && apt-get install -qy python3 python3-pip
+
+RUN mkdir -p /ansible
+WORKDIR /ansible
+COPY ansible-requirements.txt .
+
+RUN pip3 install --upgrade pip && pip3 install -r ansible-requirements.txt
+
+CMD [ "sleep", "infinity" ]

@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+ssh_private_key="$(cat .vagrant/machines/default/virtualbox/private_key)"
+namespace=$(cat namespace)
+
+docker-compose exec client \
+               conjur variable values add \
+               $namespace/ansible-demo/ssh-private-key \
+               "$ssh_private_key"
+
+echo 'View the secret in the UI:'
+echo "https://localhost:8443/ui/variables/$namespace%2Fansible-demo%2Fssh-private-key"

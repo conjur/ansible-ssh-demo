@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+namespace=$(cat namespace)
+
+docker-compose exec client \
+               env CONJUR_MAJOR_VERSION=4 \
+               summon -D NAMESPACE=$namespace \
+               bash -c 'ansible all -m ping -u vagrant --key-file=$SSH_PRIVATE_KEY_FILE'
