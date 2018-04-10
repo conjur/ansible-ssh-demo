@@ -6,6 +6,6 @@ RUN mkdir -p /ansible
 WORKDIR /ansible
 COPY ansible-requirements.txt .
 
-RUN pip3 install --upgrade pip && pip3 install -r ansible-requirements.txt
+RUN pip3 install --upgrade pip setuptools && pip3 install -r ansible-requirements.txt
 
 CMD [ "sleep", "infinity" ]
